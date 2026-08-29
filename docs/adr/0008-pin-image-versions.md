@@ -19,7 +19,11 @@
 | Grafana | 13.2.0 |
 | Tempo | 3.0.3 |
 
+provider も同じ考えで、`terraform/.terraform.lock.hcl` をコミットする。バージョンとチェックサムが固定され、CI と手元で同じ `kreuzwerker/docker` が入る。
+ロックには生成したプラットフォームのハッシュしか入らないので、`terraform providers lock` で darwin / linux の arm64 / amd64 をまとめて記録する。
+
 ## 結果
 
 - 更新は `images` を書き換えて `mise run plan` で差分を見てから apply
+- provider の更新は `terraform init -upgrade` を明示的に叩いたときだけ。そのあと `terraform providers lock -platform=...` を再実行してコミットする
 - 自動更新は入れない。Renovate を足すなら `images` の既定値を対象にする

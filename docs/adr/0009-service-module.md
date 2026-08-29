@@ -11,13 +11,12 @@
 
 HashiCorp の標準モジュール構成（`main.tf` / `variables.tf` / `outputs.tf` / `versions.tf` をルートに置き、再利用単位は `modules/` に置く）に揃える。
 
-- ルート: `versions.tf`、`providers.tf`、`variables.tf`、`locals.tf`、`main.tf`（ネットワークと module 呼び出し）、`outputs.tf`、`moved.tf`
+- ルート: `versions.tf`、`providers.tf`、`variables.tf`、`locals.tf`、`main.tf`（ネットワークと module 呼び出し）、`outputs.tf`
 - `modules/service`: イメージ・コンテナ・任意のデータボリューム・設定ファイル埋め込み・loopback 限定ポート公開を 1 つにまとめる
-- 旧リソースアドレスからの引き継ぎは `moved` ブロックで書き、`terraform plan` で作り直しが出ないことを確認した（Grafana だけは upload の `source` → `content` 切り替えで 1 回作り直し。データはボリュームにあるので消えない）
+- 旧リソースアドレスからの引き継ぎは一時的に `moved` ブロックで行い、`terraform plan` で作り直しが出ないことを確認した。旧構成で apply した環境が残っていないため、公開前に `moved.tf` は削除した
 - コンテナの `log_opts` / `log_driver` は `ignore_changes`。Docker デーモン（OrbStack）が既定値を付けて返すため、放っておくと毎回 replace になる
 
 ## 結果
 
 - 新しいコンポーネントは `main.tf` に module 呼び出しを 1 つ足すだけになる
-- `moved.tf` は全環境で apply が済んだら削除してよい
 - terraform-docs が README の入力・出力表を生成する。手書きの説明はマーカーの外に置く

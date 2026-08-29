@@ -10,7 +10,7 @@ terraform/
 ├── locals.tf        名前・ラベル・ダッシュボード一覧
 ├── main.tf          ネットワークと 5 つの module 呼び出し
 ├── outputs.tf       出力
-├── moved.tf         旧構成からの state 引き継ぎ
+├── .terraform.lock.hcl  provider のバージョンとチェックサム（コミットする）
 ├── config/          各コンポーネントに埋め込む設定（.tftpl は templatefile で描画）
 └── modules/service  イメージ + コンテナ + ボリューム + 設定ファイル埋め込みの共通形
 ```
