@@ -71,5 +71,5 @@ public repo。値をファイルに書かない。
 
 - ドキュメントもコメントも日本語。AI 臭い表現（「実現」「活用」「包括的」、意味のない三点列挙、両論併記）を避ける
 - コードコメントは why だけ。what や変更履歴は書かない
-- 設計判断は `docs/adr/` に残す。`template.md` を `NNNN-english-kebab-case.md` にコピーし、`docs/adr/README.md` の表に 1 行足す。番号は連番で欠番も再利用もしない（次は 0015）
+- 設計判断は `docs/adr/` に残す。`template.md` を `NNNN-english-kebab-case.md` にコピーし、`docs/adr/README.md` の表に 1 行足す。番号は連番で欠番も再利用もしない（次は 0016）
 - 構築は Terraform。Compose は使わない
