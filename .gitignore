@@ -14,6 +14,7 @@ crash.log
 .DS_Store
 .mise.local.toml
 .claude/settings.local.json
+.claude/worktrees
 
 # 仕様書は手元でだけ持つ
 docs/spec/
