@@ -38,6 +38,12 @@ repos:
         entry: rumdl check
         language: system
         types: [markdown]
+      - id: terraform-docs
+        name: terraform-docs（README の入力・出力表を更新）
+        entry: sh -c 'terraform-docs -c .terraform-docs.yml terraform && terraform-docs -c .terraform-docs.yml terraform/modules/service'
+        language: system
+        files: ^terraform/.*\.tf$
+        pass_filenames: false
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:

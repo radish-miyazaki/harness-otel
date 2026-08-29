@@ -1,6 +1,7 @@
 # 日本語の文章が前提。行長は意味を持たないので見ない
 [global]
-exclude = ["docs/spec", ".terraform"]
+# terraform/**/README.md は terraform-docs の生成物なので見ない
+exclude = ["docs/spec", ".terraform", "terraform/README.md", "terraform/modules/*/README.md"]
 disable = ["MD013"]
 
 [MD007]

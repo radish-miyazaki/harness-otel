@@ -1,0 +1,45 @@
+formatter: markdown table
+
+# 生成物は terraform/README.md と modules/*/README.md のマーカー内。手で書く説明はマーカーの外に置く
+output:
+  file: README.md
+  mode: inject
+
+sort:
+  enabled: true
+  by: required
+
+settings:
+  anchor: false
+  default: true
+  description: true
+  hide-empty: true
+  lockfile: false
+  required: true
+  sensitive: true
+  type: true
+
+content: |-
+  ## 要件
+
+  {{ .Requirements }}
+
+  ## プロバイダー
+
+  {{ .Providers }}
+
+  ## モジュール
+
+  {{ .Modules }}
+
+  ## リソース
+
+  {{ .Resources }}
+
+  ## 入力
+
+  {{ .Inputs }}
+
+  ## 出力
+
+  {{ .Outputs }}

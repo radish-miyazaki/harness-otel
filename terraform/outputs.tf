@@ -11,3 +11,11 @@ output "otlp_http_endpoint" {
 output "grafana_url" {
   value = "http://${var.bind_address}:${var.ports.grafana}"
 }
+
+output "container_names" {
+  description = "起動しているコンテナ名。docker logs の引数に使う"
+  value = concat(
+    [module.collector.name, module.prometheus.name, module.loki.name, module.grafana.name],
+    [for m in module.tempo : m.name],
+  )
+}

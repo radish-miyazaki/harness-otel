@@ -12,3 +12,4 @@
 | [0006](0006-codex-cost-recording-rule.md) | Codex のコストは Prometheus の recording rule で推計する | 採用 |
 | [0007](0007-tooling-mise-prek-actions.md) | ツールは mise、Git フックは prek、CI は GitHub Actions | 採用 |
 | [0008](0008-pin-image-versions.md) | イメージはパッチバージョンまで固定する | 採用 |
+| [0009](0009-service-module.md) | コンテナ 1 つ分を `modules/service` に括り出す | 採用 |

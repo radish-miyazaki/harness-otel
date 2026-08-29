@@ -55,6 +55,18 @@ OTel の設定は起動時にしか読まれないので、書いたあとはハ
 | `mise run lint` | prek で fmt / validate / tflint / gitleaks / ryl / rumdl などを一括実行 |
 | `mise run hooks-install` | commit 時に上記 lint を走らせる Git フックを入れる。フック内で tflint などを呼ぶので、シェルで `mise activate` しておくこと |
 
+## ディレクトリ
+
+```text
+terraform/           ルートモジュール（構成は terraform/README.md）
+terraform/config/    Collector / Prometheus / Loki / Tempo / Grafana に埋め込む設定
+terraform/modules/   コンテナ 1 つ分の共通モジュール
+docs/adr/            設計判断の記録
+docs/setup.md        P0〜P4 の導入手順
+examples/            Claude Code / Codex 側の設定サンプル
+scripts/             smoke test
+```
+
 ## 変えたくなりそうな値
 
 すべて `terraform/variables.tf` にあります。`terraform.tfvars`（gitignore 済み）か `TF_VAR_*` で上書きします。
