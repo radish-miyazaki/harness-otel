@@ -215,8 +215,8 @@
       "type": "timeseries",
       "title": "Codex 承認結果",
       "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
+        "type": "loki",
+        "uid": "loki"
       },
       "gridPos": {
         "w": 12,
@@ -228,18 +228,19 @@
         {
           "refId": "A",
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "loki",
+            "uid": "loki"
           },
-          "expr": "sum by (tool, approved) (increase(approval_requested_total[1d]))",
-          "legendFormat": "{{tool}} approved={{approved}}"
+          "expr": "sum by (decision, source) (count_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.tool_decision\" [$__auto]))",
+          "legendFormat": "{{decision}} / {{source}}"
         }
       ],
       "fieldConfig": {
         "defaults": {},
         "overrides": []
       },
-      "options": {}
+      "options": {},
+      "description": "source=Config は approval_policy による自動判断、User は人が答えたもの"
     },
     {
       "id": 23,

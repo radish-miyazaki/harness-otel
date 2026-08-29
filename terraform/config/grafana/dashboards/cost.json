@@ -284,8 +284,8 @@
       "type": "timeseries",
       "title": "Codex トークン推移（token_type 別）",
       "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
+        "type": "loki",
+        "uid": "loki"
       },
       "gridPos": {
         "w": 12,
@@ -297,11 +297,38 @@
         {
           "refId": "A",
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "loki",
+            "uid": "loki"
           },
-          "expr": "sum by (token_type) (rate(turn_token_usage_sum[$__rate_interval]))",
-          "legendFormat": "{{token_type}}"
+          "expr": "sum(sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap input_token_count [$__auto]))",
+          "legendFormat": "__auto"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap cached_token_count [$__auto]))",
+          "legendFormat": "__auto"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap output_token_count [$__auto]))",
+          "legendFormat": "__auto"
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap reasoning_token_count [$__auto]))",
+          "legendFormat": "__auto"
         }
       ],
       "fieldConfig": {
@@ -309,15 +336,15 @@
         "overrides": []
       },
       "options": {},
-      "description": "メトリクス名は実測で確認すること（Codex の histogram は単位付きで出力される可能性がある）"
+      "description": "codex.sse_event の response.completed に付くトークン数を Loki から集計。A=input B=cached_input C=output D=reasoning。cached_input は input に含まれる"
     },
     {
       "id": 9,
       "type": "timeseries",
       "title": "Codex 推計コスト（円/時）",
       "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
+        "type": "loki",
+        "uid": "loki"
       },
       "gridPos": {
         "w": 12,
@@ -329,10 +356,10 @@
         {
           "refId": "A",
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "loki",
+            "uid": "loki"
           },
-          "expr": "codex:estimated_cost_usd:rate1h * $usdjpy",
+          "expr": "(sum by (model) (sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap input_token_count [1h])) * 1.25 + sum by (model) (sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap output_token_count [1h])) * 10) / 1e6 * $usdjpy",
           "legendFormat": "{{model}}"
         }
       ],
@@ -343,7 +370,7 @@
         "overrides": []
       },
       "options": {},
-      "description": "Prometheus の recording rule。単価は terraform の codex_model_prices"
+      "description": "単価は GPT-5 の公表値（input 1.25 / output 10 USD per 1M tokens）をクエリに直書き。モデルが変わったら見直す。推計値であり請求額ではない"
     }
   ]
 }

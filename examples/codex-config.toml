@@ -4,6 +4,10 @@ environment = "local"
 log_user_prompt = false
 exporter = { otlp-grpc = { endpoint = "http://127.0.0.1:4317", headers = {} } }
 
+# 0.150 系のバイナリには metrics_exporter / trace_exporter キーが存在するが、公式ドキュメントに
+# 記載がなく書式も未確認。試す場合は exporter と同じ形で書き、起動時の警告を見ること
+# metrics_exporter = { otlp-grpc = { endpoint = "http://127.0.0.1:4317", headers = {} } }
+
 # gRPC で不具合が出たら HTTP に切り替える
 # exporter = { otlp-http = { endpoint = "http://127.0.0.1:4318/v1/logs", protocol = "binary" } }
 

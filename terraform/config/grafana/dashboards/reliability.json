@@ -148,8 +148,8 @@
       "type": "timeseries",
       "title": "Codex API 成否",
       "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
+        "type": "loki",
+        "uid": "loki"
       },
       "gridPos": {
         "w": 12,
@@ -161,11 +161,11 @@
         {
           "refId": "A",
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "loki",
+            "uid": "loki"
           },
-          "expr": "sum by (success) (rate(codex_api_request_total[$__rate_interval]))",
-          "legendFormat": "success={{success}}"
+          "expr": "sum by (success, http_response_status_code) (count_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.api_request\" [$__auto]))",
+          "legendFormat": "success={{success}} status={{http_response_status_code}}"
         }
       ],
       "fieldConfig": {
@@ -179,8 +179,8 @@
       "type": "timeseries",
       "title": "Codex API レイテンシ p95",
       "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
+        "type": "loki",
+        "uid": "loki"
       },
       "gridPos": {
         "w": 12,
@@ -192,11 +192,11 @@
         {
           "refId": "A",
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "loki",
+            "uid": "loki"
           },
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(codex_api_request_duration_ms_bucket[$__rate_interval])))",
-          "legendFormat": "__auto"
+          "expr": "quantile_over_time(0.95, {service_name=\"codex_cli_rs\"} | event_name=\"codex.api_request\" | unwrap duration_ms [$__auto]) by (endpoint)",
+          "legendFormat": "{{endpoint}}"
         }
       ],
       "fieldConfig": {

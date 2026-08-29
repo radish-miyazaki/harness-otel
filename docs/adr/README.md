@@ -13,3 +13,4 @@
 | [0007](0007-tooling-mise-prek-actions.md) | ツールは mise、Git フックは prek、CI は GitHub Actions | 採用 |
 | [0008](0008-pin-image-versions.md) | イメージはパッチバージョンまで固定する | 採用 |
 | [0009](0009-service-module.md) | コンテナ 1 つ分を `modules/service` に括り出す | 採用 |
+| [0010](0010-codex-from-logs.md) | Codex はメトリクスを待たずログから可視化する | 採用 |

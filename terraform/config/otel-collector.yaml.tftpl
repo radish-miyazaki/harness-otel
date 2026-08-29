@@ -30,6 +30,13 @@ processors:
         action: delete
       - key: response_body
         action: delete
+      # Codex はツールの引数（コマンド全文）と出力、メールアドレスをログ属性で送ってくる
+      - key: arguments
+        action: delete
+      - key: output
+        action: delete
+      - key: user.email
+        action: delete
   # OAuth 認証時は user.email がリソース属性として常に付く。ローカル保存でも個人情報は残さない
   resource/scrub:
     attributes:

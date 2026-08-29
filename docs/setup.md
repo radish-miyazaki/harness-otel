@@ -45,9 +45,14 @@ Grafana → Explore → Loki で:
 `examples/codex-config.toml` の `[otel]` を `~/.codex/config.toml` に足して Codex を再起動します。
 プロジェクト配下の `.codex/config.toml` に書いても無視されます（起動時に警告が出ます）。
 
-確認は Explore → Prometheus で `{__name__=~"codex.*|turn.*|approval.*"}`。
-公式ドキュメントは「ログエクスポート」を主語にしているため、メトリクスが届かない場合は Config Reference を再確認してください。
-届いたメトリクス名がダッシュボードのクエリと違っていれば、`terraform/config/grafana/dashboards/*.json` を直して `mise run apply` します。
+確認は Explore → Loki で:
+
+```logql
+{service_name="codex_cli_rs"} | event_name="codex.sse_event" | event_kind="response.completed"
+```
+
+トークン数（`input_token_count` など）が付いていれば、コストダッシュボードの Codex パネルに出ます。
+0.150 時点では `[otel] exporter` だけだとメトリクスは出ないので、Prometheus 側に `codex_*` が無くても異常ではありません。
 
 ## P4: トレース（Claude Code ベータ）
 

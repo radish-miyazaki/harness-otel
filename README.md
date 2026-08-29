@@ -80,13 +80,13 @@ scripts/             smoke test
 ## データの扱い
 
 - プロンプト本文、応答本文、ツール引数はハーネス側の既定で送られません。送る設定にしていても、Collector の `attributes/scrub` が `prompt` / `response` / `body` / `tool_input` などの属性を落とします（`mise run smoke` で確認できます）
-- Claude Code が付ける `user.email`（OAuth 認証時のメールアドレス）は Collector の `resource/scrub` で落とします
+- Claude Code が付ける `user.email`（OAuth 認証時のメールアドレス）は Collector の `resource/scrub` で落とします。Codex はメールアドレスに加えてツールの引数（`arguments`、シェルコマンド全文）と出力（`output`）をログ属性で送ってくるので、これも `attributes/scrub` で落とします
 - 4317 / 4318 / 3000 はすべて `127.0.0.1` にしか公開しません。Prometheus と Loki はホストにポートを出していません
 - `claude_code.cost.usage` は Anthropic が算出する推計値です。請求額ではありません。ダッシュボードにもそう書いてあります
 
 ## 未確認の点
 
-- Codex のメトリクス名（`turn_token_usage_sum` など）は Collector の Prometheus exporter を通した後の実名を確認していません。Grafana の Explore で `{__name__=~"codex.*|turn.*"}` を引いて、ダッシュボードのクエリを合わせてください
+- Codex 0.150 は `[otel] exporter` だけではログしか送ってきません（メトリクスは 0 件）。ダッシュボードの Codex 系パネルはすべて Loki のイベントから集計しています。`metrics_exporter` キーで metrics が出るようになったら Prometheus 側に切り替える予定です
 - Windows ネイティブは試していません（WSL 想定）
 
 ## ライセンス
