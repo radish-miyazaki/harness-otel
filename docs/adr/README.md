@@ -14,3 +14,5 @@
 | [0008](0008-pin-image-versions.md) | イメージはパッチバージョンまで固定する | 採用 |
 | [0009](0009-service-module.md) | コンテナ 1 つ分を `modules/service` に括り出す | 採用 |
 | [0010](0010-codex-from-logs.md) | Codex はメトリクスを待たずログから可視化する | 採用 |
+| [0011](0011-pin-actions-to-sha.md) | GitHub Actions はコミット SHA で固定する | 採用 |
+| [0012](0012-zizmor-for-actions-security.md) | GitHub Actions のセキュリティ検査に zizmor を入れる | 採用 |
