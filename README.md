@@ -13,6 +13,7 @@ Codex CLI  ───┘   :4317/:4318      └─ Loki ───────┘
 ![アーキテクチャ図](docs/architecture.svg)
 
 設計上の判断は [docs/adr](docs/adr) にあります。
+使っているツールとコンポーネントは [docs/tech-stack.md](docs/tech-stack.md) にまとめています。
 
 ## 必要なもの
 
