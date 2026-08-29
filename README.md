@@ -12,7 +12,7 @@ Codex CLI  ───┘   :4317/:4318      └─ Loki ───────┘
 
 ![アーキテクチャ図](docs/architecture.svg)
 
-設計上の判断は [docs/adr](docs/adr) にあります（元の仕様書はリポジトリには含めていません）。
+設計上の判断は [docs/adr](docs/adr) にあります。
 
 ## 必要なもの
 
@@ -45,7 +45,6 @@ OrbStack を使っている場合は `TF_VAR_docker_host=unix:///Users/<you>/.or
 | Codex CLI | `~/.codex/config.toml`（プロジェクト配下では無視される） | [examples/codex-config.toml](examples/codex-config.toml) |
 
 OTel の設定は起動時にしか読まれないので、書いたあとはハーネスを再起動します。
-手順の詳細と、届かないときの調べ方は [docs/setup.md](docs/setup.md) を見てください。
 
 ## よく使うコマンド
 
@@ -64,7 +63,6 @@ terraform/           ルートモジュール（構成は terraform/README.md）
 terraform/config/    Collector / Prometheus / Loki / Tempo / Grafana に埋め込む設定
 terraform/modules/   コンテナ 1 つ分の共通モジュール
 docs/adr/            設計判断の記録
-docs/setup.md        P0〜P4 の導入手順
 examples/            Claude Code / Codex 側の設定サンプル
 scripts/             smoke test
 ```
