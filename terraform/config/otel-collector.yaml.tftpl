@@ -1,0 +1,70 @@
+receivers:
+  otlp:
+    protocols:
+      # コンテナ内では全インターフェースで待つ。外部露出はホスト側の 127.0.0.1 バインドで防ぐ
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+    spike_limit_mib: 128
+  batch:
+    timeout: 5s
+    send_batch_size: 1024
+  # 設定ミスでプロンプト本文が流れてきても、保存前にここで落とす
+  attributes/scrub:
+    actions:
+      - key: prompt
+        action: delete
+      - key: response
+        action: delete
+      - key: body
+        action: delete
+      - key: tool_input
+        action: delete
+      - key: request_body
+        action: delete
+      - key: response_body
+        action: delete
+
+exporters:
+  prometheus:
+    endpoint: 0.0.0.0:9464
+    resource_to_telemetry_conversion:
+      enabled: true
+  otlphttp/loki:
+    endpoint: http://${loki_host}:3100/otlp
+%{ if enable_tracing ~}
+  otlp/tempo:
+    endpoint: ${tempo_host}:4317
+    tls:
+      insecure: true
+%{ endif ~}
+  debug:
+    verbosity: basic
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [prometheus]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, attributes/scrub, batch]
+      exporters: [otlphttp/loki]
+%{ if enable_tracing ~}
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, attributes/scrub, batch]
+      exporters: [otlp/tempo]
+%{ endif ~}
+  telemetry:
+    logs:
+      level: info
+    metrics:
+      level: basic

@@ -1,0 +1,7 @@
+# 実際の値は terraform.tfvars（gitignore 済み）か TF_VAR_* 環境変数で渡す。
+# パスワードはこのファイル形式でも置かず、環境変数を使うこと。
+
+# docker_host      = "unix:///Users/<you>/.orbstack/run/docker.sock"
+# retention_days   = 90
+# enable_tracing   = false
+# usd_jpy_rate     = 150

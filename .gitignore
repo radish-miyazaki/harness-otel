@@ -1,0 +1,17 @@
+# 秘密情報・ローカル状態は絶対に載せない
+.env
+.env.*
+!.env.example
+*.tfvars
+!*.tfvars.example
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+*.pem
+*.key
+
+.DS_Store
+.mise.local.toml
+.claude/settings.local.json

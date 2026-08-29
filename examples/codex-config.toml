@@ -1,0 +1,12 @@
+# ~/.codex/config.toml に追記する。プロジェクト配下の .codex/config.toml では otel は無視される。
+[otel]
+environment = "local"
+log_user_prompt = false
+exporter = { otlp-grpc = { endpoint = "http://127.0.0.1:4317", headers = {} } }
+
+# gRPC で不具合が出たら HTTP に切り替える
+# exporter = { otlp-http = { endpoint = "http://127.0.0.1:4318/v1/logs", protocol = "binary" } }
+
+# OpenAI への匿名利用統計を止めたい場合
+# [analytics]
+# enabled = false

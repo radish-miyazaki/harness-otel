@@ -1,0 +1,44 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: jdx/mise-action@v2
+        with:
+          install: true
+          cache: true
+      - name: prek（フック一式を全ファイルに適用）
+        run: prek run --all-files --show-diff-on-failure
+      - name: gitleaks（履歴全体）
+        run: gitleaks git --redact --no-banner .
+
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+        with:
+          install: true
+          cache: true
+      - name: init / validate（Docker は不要）
+        working-directory: terraform
+        run: |
+          terraform init -backend=false -input=false
+          terraform validate
+      - name: plan の構文確認（provider に接続しないためテンプレート描画のみ）
+        working-directory: terraform
+        env:
+          TF_VAR_grafana_admin_password: ci-only-placeholder-value
+        run: terraform fmt -check -recursive

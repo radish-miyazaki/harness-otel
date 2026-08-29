@@ -1,0 +1,16 @@
+# Codex は USD 建てコストを出力しないため、トークン数 × 単価で推計する。
+# 単価は terraform の codex_model_prices で管理し、公式価格ページを見て手で更新する。
+groups:
+  - name: codex-cost
+    rules:
+%{ for model, price in prices ~}
+      - record: codex:estimated_cost_usd:rate1h
+        labels:
+          model: "${model}"
+        expr: |
+          (
+              sum(rate(turn_token_usage_sum{model="${model}", token_type="input"}[1h]))        * ${price.input}
+            + sum(rate(turn_token_usage_sum{model="${model}", token_type="cached_input"}[1h])) * ${price.cached_input}
+            + sum(rate(turn_token_usage_sum{model="${model}", token_type="output"}[1h]))       * ${price.output}
+          ) * 3600 / 1e6
+%{ endfor ~}
