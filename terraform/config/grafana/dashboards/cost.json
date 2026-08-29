@@ -51,7 +51,7 @@
     {
       "id": 1,
       "type": "stat",
-      "title": "本日のコスト（推計・円）",
+      "title": "Claude Code 本日のコスト（推計・円）",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -85,7 +85,7 @@
     {
       "id": 2,
       "type": "stat",
-      "title": "本日のコスト（推計・USD）",
+      "title": "Claude Code 本日のコスト（推計・USD）",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -118,7 +118,7 @@
     {
       "id": 3,
       "type": "gauge",
-      "title": "キャッシュヒット率",
+      "title": "Claude Code キャッシュヒット率",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -152,7 +152,7 @@
     {
       "id": 4,
       "type": "gauge",
-      "title": "サブエージェント比率",
+      "title": "Claude Code サブエージェント比率",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -185,7 +185,7 @@
     {
       "id": 5,
       "type": "barchart",
-      "title": "モデル別コスト（日次・円）",
+      "title": "Claude Code モデル別コスト（日次・円）",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -218,7 +218,7 @@
     {
       "id": 6,
       "type": "timeseries",
-      "title": "トークン種別内訳",
+      "title": "Claude Code トークン種別内訳",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -251,7 +251,7 @@
     {
       "id": 7,
       "type": "timeseries",
-      "title": "query_source 別トークン",
+      "title": "Claude Code query_source 別トークン",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -282,7 +282,7 @@
     {
       "id": 8,
       "type": "timeseries",
-      "title": "Codex トークン推移（token_type 別）",
+      "title": "Codex トークン種別内訳",
       "datasource": {
         "type": "loki",
         "uid": "loki"
@@ -301,7 +301,7 @@
             "uid": "loki"
           },
           "expr": "sum(sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap input_token_count [$__auto]))",
-          "legendFormat": "__auto"
+          "legendFormat": "input"
         },
         {
           "refId": "B",
@@ -310,7 +310,7 @@
             "uid": "loki"
           },
           "expr": "sum(sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap cached_token_count [$__auto]))",
-          "legendFormat": "__auto"
+          "legendFormat": "cached_input"
         },
         {
           "refId": "C",
@@ -319,7 +319,7 @@
             "uid": "loki"
           },
           "expr": "sum(sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap output_token_count [$__auto]))",
-          "legendFormat": "__auto"
+          "legendFormat": "output"
         },
         {
           "refId": "D",
@@ -328,7 +328,7 @@
             "uid": "loki"
           },
           "expr": "sum(sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap reasoning_token_count [$__auto]))",
-          "legendFormat": "__auto"
+          "legendFormat": "reasoning_output"
         }
       ],
       "fieldConfig": {
@@ -336,12 +336,12 @@
         "overrides": []
       },
       "options": {},
-      "description": "codex.sse_event の response.completed に付くトークン数を Loki から集計。A=input B=cached_input C=output D=reasoning。cached_input は input に含まれる"
+      "description": "codex.sse_event の response.completed に付くトークン数を Loki から集計。cached_input は input に含まれる"
     },
     {
       "id": 9,
-      "type": "timeseries",
-      "title": "Codex 推計コスト（円/時）",
+      "type": "barchart",
+      "title": "Codex モデル別コスト（日次・円）",
       "datasource": {
         "type": "loki",
         "uid": "loki"
@@ -359,7 +359,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "(sum by (model) (sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap input_token_count [1h])) * 1.25 + sum by (model) (sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap output_token_count [1h])) * 10) / 1e6 * $usdjpy",
+          "expr": "(sum by (model) (sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap input_token_count [1d])) * 1.25 + sum by (model) (sum_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.sse_event\" | event_kind=\"response.completed\" | unwrap output_token_count [1d])) * 10) / 1e6 * $usdjpy",
           "legendFormat": "{{model}}"
         }
       ],
@@ -370,7 +370,7 @@
         "overrides": []
       },
       "options": {},
-      "description": "単価は GPT-5 の公表値（input 1.25 / output 10 USD per 1M tokens）をクエリに直書き。モデルが変わったら見直す。推計値であり請求額ではない"
+      "description": "Claude Code 側と同じ日次・円。単価は GPT-5 の公表値（input 1.25 / output 10 USD per 1M tokens）をクエリに直書き。推計値であり請求額ではない"
     }
   ]
 }
