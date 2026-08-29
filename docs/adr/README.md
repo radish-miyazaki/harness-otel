@@ -2,6 +2,11 @@
 
 設計上の判断と、その時点で分かっていたことを残します。あとで前提が変わったら新しい番号で上書きし、古い方の状態を「置き換え済み」にします。
 
+## 書き方
+
+[template.md](template.md) を `NNNN-英語のケバブケース.md` にコピーして埋め、下の表に 1 行足します。番号は連番で、欠番も再利用もしません。
+状態は「採用」か「置き換え済み」。置き換えるときは、新しい方から古い番号へリンクを張ります。
+
 | # | 題名 | 状態 |
 | --- | --- | --- |
 | [0001](0001-terraform-docker-provider.md) | コンテナ管理に Terraform の Docker provider を使う | 採用 |
@@ -14,3 +19,5 @@
 | [0008](0008-pin-image-versions.md) | イメージはパッチバージョンまで固定する | 採用 |
 | [0009](0009-service-module.md) | コンテナ 1 つ分を `modules/service` に括り出す | 採用 |
 | [0010](0010-codex-from-logs.md) | Codex はメトリクスを待たずログから可視化する | 採用 |
+| [0011](0011-pin-actions-to-sha.md) | GitHub Actions はコミット SHA で固定する | 採用 |
+| [0012](0012-zizmor-for-actions-security.md) | GitHub Actions のセキュリティ検査に zizmor を入れる | 採用 |

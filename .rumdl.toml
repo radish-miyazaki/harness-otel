@@ -1,7 +1,8 @@
 # 日本語の文章が前提。行長は意味を持たないので見ない
 [global]
-# terraform/**/README.md は terraform-docs の生成物なので見ない
-exclude = ["docs/spec", ".terraform", "terraform/README.md", "terraform/modules/*/README.md"]
+# terraform/**/README.md は terraform-docs の生成物なので見ない。
+# PR テンプレートは本文に差し込む断片で、H1 から始まる文書ではない
+exclude = ["docs/spec", ".terraform", "terraform/README.md", "terraform/modules/*/README.md", ".github/pull_request_template.md"]
 disable = ["MD013"]
 
 [MD007]

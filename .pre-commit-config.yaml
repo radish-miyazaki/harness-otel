@@ -52,3 +52,11 @@ repos:
     rev: v1.7.12
     hooks:
       - id: actionlint
+  # actionlint は構文と式、zizmor はセキュリティ。見る観点が違うので両方かける
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.29.0
+    hooks:
+      - id: zizmor
+        # 手元と CI で結果を揃えるためオフラインに固定する。
+        # ネットワークが要る監査は CI の専用ステップで回す
+        args: [--no-progress, --offline]
