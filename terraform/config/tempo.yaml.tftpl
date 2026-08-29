@@ -16,7 +16,8 @@ storage:
     wal:
       path: /var/tempo/wal
 
-compactor:
+# Tempo 3.0 で compactor は廃止され、保持期間は backend_worker 側に移った
+backend_worker:
   compaction:
     block_retention: ${retention}
 
