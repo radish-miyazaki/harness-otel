@@ -80,3 +80,10 @@ service:
       level: info
     metrics:
       level: basic
+      # 既定の localhost:8888 だと Prometheus コンテナから読めない
+      readers:
+        - pull:
+            exporter:
+              prometheus:
+                host: 0.0.0.0
+                port: 8888

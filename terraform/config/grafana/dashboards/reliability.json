@@ -20,9 +20,117 @@
   },
   "panels": [
     {
-      "id": 24,
+      "id": 25,
+      "type": "row",
+      "title": "Claude Code",
+      "collapsed": false,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 0
+      },
+      "panels": []
+    },
+    {
+      "id": 26,
+      "type": "stat",
+      "title": "Claude Code リトライ枯渇",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "w": 8,
+        "h": 5,
+        "x": 0,
+        "y": 1
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum (count_over_time({service_name=\"claude-code\"} | event_name=\"api_retries_exhausted\" [$__range]))",
+          "legendFormat": "件"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 27,
+      "type": "stat",
+      "title": "Claude Code コンパクション回数",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "w": 8,
+        "h": 5,
+        "x": 8,
+        "y": 1
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum (count_over_time({service_name=\"claude-code\"} | event_name=\"compaction\" [$__range]))",
+          "legendFormat": "件"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 28,
+      "type": "gauge",
+      "title": "Claude Code ツール失敗率",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "w": 8,
+        "h": 5,
+        "x": 16,
+        "y": 1
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum (count_over_time({service_name=\"claude-code\"} | event_name=\"tool_result\" | success=\"false\" [$__range])) / sum (count_over_time({service_name=\"claude-code\"} | event_name=\"tool_result\" [$__range]))",
+          "legendFormat": "failed"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 29,
       "type": "timeseries",
-      "title": "API エラー（status_code 別）",
+      "title": "Claude Code API エラー（status_code 別）",
       "datasource": {
         "type": "loki",
         "uid": "loki"
@@ -31,7 +139,7 @@
         "w": 12,
         "h": 8,
         "x": 0,
-        "y": 0
+        "y": 6
       },
       "targets": [
         {
@@ -48,74 +156,57 @@
         "defaults": {},
         "overrides": []
       },
-      "options": {}
+      "options": {},
+      "description": "status_code の属性名は未検証（まだ api_error が 1 件も出ていない）"
     },
     {
-      "id": 25,
-      "type": "stat",
-      "title": "リトライ枯渇",
-      "datasource": {
-        "type": "loki",
-        "uid": "loki"
-      },
-      "gridPos": {
-        "w": 6,
-        "h": 5,
-        "x": 12,
-        "y": 0
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": {
-            "type": "loki",
-            "uid": "loki"
-          },
-          "expr": "sum(count_over_time({service_name=\"claude-code\"} | event_name=\"api_retries_exhausted\" [$__range]))",
-          "legendFormat": "__auto"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "options": {}
-    },
-    {
-      "id": 26,
-      "type": "stat",
-      "title": "コンパクション回数",
-      "datasource": {
-        "type": "loki",
-        "uid": "loki"
-      },
-      "gridPos": {
-        "w": 6,
-        "h": 5,
-        "x": 18,
-        "y": 0
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": {
-            "type": "loki",
-            "uid": "loki"
-          },
-          "expr": "sum(count_over_time({service_name=\"claude-code\"} | event_name=\"compaction\" [$__range]))",
-          "legendFormat": "__auto"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "options": {}
-    },
-    {
-      "id": 27,
+      "id": 30,
       "type": "timeseries",
-      "title": "ツール失敗（error_type 別）",
+      "title": "Claude Code ツール失敗（tool_name × error_type）",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 6
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum by (tool_name, error_type) (count_over_time({service_name=\"claude-code\"} | event_name=\"tool_result\" | success=\"false\" [$__auto]))",
+          "legendFormat": "{{tool_name}} / {{error_type}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 31,
+      "type": "row",
+      "title": "Codex",
+      "collapsed": false,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 14
+      },
+      "panels": []
+    },
+    {
+      "id": 32,
+      "type": "timeseries",
+      "title": "Codex API 成否（status 別）",
       "datasource": {
         "type": "loki",
         "uid": "loki"
@@ -124,38 +215,7 @@
         "w": 12,
         "h": 8,
         "x": 0,
-        "y": 8
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": {
-            "type": "loki",
-            "uid": "loki"
-          },
-          "expr": "sum by (error_type) (count_over_time({service_name=\"claude-code\"} | event_name=\"tool_result\" | success=\"false\" [$__auto]))",
-          "legendFormat": "{{error_type}}"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "options": {}
-    },
-    {
-      "id": 28,
-      "type": "timeseries",
-      "title": "Codex API 成否",
-      "datasource": {
-        "type": "loki",
-        "uid": "loki"
-      },
-      "gridPos": {
-        "w": 12,
-        "h": 8,
-        "x": 12,
-        "y": 8
+        "y": 15
       },
       "targets": [
         {
@@ -175,9 +235,9 @@
       "options": {}
     },
     {
-      "id": 29,
+      "id": 33,
       "type": "timeseries",
-      "title": "Codex API レイテンシ p95",
+      "title": "Codex ツール失敗（tool_name 別）",
       "datasource": {
         "type": "loki",
         "uid": "loki"
@@ -185,8 +245,8 @@
       "gridPos": {
         "w": 12,
         "h": 8,
-        "x": 0,
-        "y": 16
+        "x": 12,
+        "y": 15
       },
       "targets": [
         {
@@ -195,22 +255,33 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "quantile_over_time(0.95, {service_name=\"codex_cli_rs\"} | event_name=\"codex.api_request\" | unwrap duration_ms [$__auto]) by (endpoint)",
-          "legendFormat": "{{endpoint}}"
+          "expr": "sum by (tool_name) (count_over_time({service_name=\"codex_cli_rs\"} | event_name=\"codex.tool_result\" | success=\"false\" [$__auto]))",
+          "legendFormat": "{{tool_name}}"
         }
       ],
       "fieldConfig": {
-        "defaults": {
-          "unit": "ms"
-        },
+        "defaults": {},
         "overrides": []
       },
       "options": {}
     },
     {
-      "id": 30,
+      "id": 34,
+      "type": "row",
+      "title": "Collector",
+      "collapsed": false,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 23
+      },
+      "panels": []
+    },
+    {
+      "id": 35,
       "type": "timeseries",
-      "title": "Collector 受信エラー",
+      "title": "Collector 受信拒否",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -218,8 +289,8 @@
       "gridPos": {
         "w": 12,
         "h": 8,
-        "x": 12,
-        "y": 16
+        "x": 0,
+        "y": 24
       },
       "targets": [
         {
@@ -229,7 +300,7 @@
             "uid": "prometheus"
           },
           "expr": "sum by (receiver) (rate(otelcol_receiver_refused_metric_points_total[$__rate_interval]))",
-          "legendFormat": "__auto"
+          "legendFormat": "metrics {{receiver}}"
         },
         {
           "refId": "B",
@@ -238,7 +309,7 @@
             "uid": "prometheus"
           },
           "expr": "sum by (receiver) (rate(otelcol_receiver_refused_log_records_total[$__rate_interval]))",
-          "legendFormat": "__auto"
+          "legendFormat": "logs {{receiver}}"
         }
       ],
       "fieldConfig": {
@@ -246,7 +317,48 @@
         "overrides": []
       },
       "options": {},
-      "description": "Collector 自身のメトリクス。0 以外なら送信側の設定を疑う"
+      "description": "Collector 自身のメトリクス。0 以外なら送信側の設定か memory_limiter を疑う"
+    },
+    {
+      "id": 36,
+      "type": "timeseries",
+      "title": "Collector 送信失敗",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 24
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum by (exporter) (rate(otelcol_exporter_send_failed_metric_points_total[$__rate_interval]))",
+          "legendFormat": "metrics {{exporter}}"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum by (exporter) (rate(otelcol_exporter_send_failed_log_records_total[$__rate_interval]))",
+          "legendFormat": "logs {{exporter}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {},
+      "description": "Prometheus / Loki 側に届かなかった件数"
     }
   ]
 }
