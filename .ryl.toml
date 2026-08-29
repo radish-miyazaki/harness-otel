@@ -1,0 +1,46 @@
+# [rules] は書いたものだけが有効になる（yamllint の extends: default と逆）ので、既定値のルールも省略せず並べる
+ignore = [
+    # Terraform のディレクティブが混ざるので YAML として妥当ではない
+    "*.tftpl",
+]
+
+[files]
+yaml = [
+    "*.yaml",
+    "*.yml",
+]
+
+[rules]
+anchors = "enable"
+braces = "enable"
+brackets = "enable"
+colons = "enable"
+commas = "enable"
+document-end = "disable"
+document-start = "disable"
+empty-lines = "enable"
+empty-values = "disable"
+float-values = "disable"
+hyphens = "enable"
+indentation = "enable"
+key-duplicates = "enable"
+key-ordering = "disable"
+new-line-at-end-of-file = "enable"
+new-lines = "enable"
+octal-values = "disable"
+quoted-strings = "disable"
+trailing-spaces = "enable"
+
+[rules.comments]
+level = "warning"
+min-spaces-from-content = 1
+
+[rules.comments-indentation]
+level = "warning"
+
+[rules.line-length]
+max = 140
+
+[rules.truthy]
+check-keys = false
+level = "warning"

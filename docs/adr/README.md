@@ -21,3 +21,4 @@
 | [0010](0010-codex-from-logs.md) | Codex はメトリクスを待たずログから可視化する | 採用 |
 | [0011](0011-pin-actions-to-sha.md) | GitHub Actions はコミット SHA で固定する | 採用 |
 | [0012](0012-zizmor-for-actions-security.md) | GitHub Actions のセキュリティ検査に zizmor を入れる | 採用 |
+| [0013](0013-native-configs-for-prek-and-ryl.md) | prek と ryl は互換形式をやめてネイティブ設定に寄せる | 採用 |
