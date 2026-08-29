@@ -65,6 +65,7 @@ public repo。値をファイルに書かない。
 
 - タスクは `.claude/worktrees/` 配下に worktree を切って進める（gitignore 済み）。main の作業ツリーを触らないので、lint やスタックの起動状態を巻き込まずに済む
 - ブランチ名は `<type>/<簡潔な機能名>`。type はコミットと揃える（例: `feat/add-claude-md`, `chore/harden-github-actions`）
+- コミットは論理的単位で分ける。ツールの追加とその ADR、方針の追記が同じ作業から出ても別のコミットにする。1 つのファイルが複数の単位にまたがるときは、単位ごとに書き戻して順に積む
 - コミットメッセージは Conventional Commits に従う。`<type>: <要約>` で、要約は他のドキュメントと同じく日本語（例: `chore: prek と ryl の設定をネイティブ形式に移す`）
 
 ## 書き方
