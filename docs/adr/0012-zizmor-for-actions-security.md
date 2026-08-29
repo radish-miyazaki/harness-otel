@@ -12,7 +12,7 @@
 [zizmor](https://github.com/zizmorcore/zizmor) 1.29.0 を足す。GitHub Actions 専用の静的解析で、テンプレートインジェクション、資格情報の漏れ、過剰な権限、可変な参照を見る。actionlint とは見る観点が違うので置き換えではなく併用する。
 
 - `.mise.toml` に `zizmor = "1.29.0"`
-- prek のフックは upstream の `zizmorcore/zizmor-pre-commit` rev v1.29.0。`--offline` を明示して手元と CI で結果を揃える
+- prek のフックは当初 upstream の `zizmorcore/zizmor-pre-commit` rev v1.29.0。[0013](0013-native-configs-for-prek-and-ryl.md) で mise の実行ファイルを直接呼ぶ形にした。`--offline` を明示して手元と CI で結果を揃える
 - ネットワークが要る監査だけ CI の専用ステップで回す。`GH_TOKEN` は `github.token`（`contents: read`）で足りる
 
 `unpinned-uses` は既定でハッシュ必須（blanket policy）なので、`zizmor.yml` は置かない。`@v4` に戻すと high の error で落ちる。
@@ -23,4 +23,4 @@
 
 - 指摘に従い `actions/checkout` に `persist-credentials: false` を付けた（`artipacked`）。CI は読むだけで push しないので、`GITHUB_TOKEN` を `.git/config` に残す理由がない
 - persona は既定の `regular` のまま。`pedantic` / `auditor` で出る `anonymous-definition` と `concurrency-limits` は、この規模の CI では雑音なので拾わない
-- zizmor は `.pre-commit-config.yaml` 自体も監査する。フックの `rev` を可変な参照にすると指摘される
+- zizmor は `.pre-commit-config.yaml` 自体も監査していた。[0013](0013-native-configs-for-prek-and-ryl.md) で `prek.toml` に移したあとは対象外になる

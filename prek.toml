@@ -1,0 +1,42 @@
+#:schema https://www.schemastore.org/prek.json
+
+# prek 同梱の実装。リモートの clone も rev の固定も要らない
+[[repos]]
+repo = "builtin"
+hooks = [
+  { id = "end-of-file-fixer" },
+  { id = "trailing-whitespace" },
+  # .tftpl は Terraform のディレクティブが混ざるので YAML として妥当ではない
+  { id = "check-yaml", args = ["--allow-multiple-documents"], exclude = '\.tftpl$' },
+  { id = "check-json" },
+  { id = "check-added-large-files" },
+  { id = "detect-private-key" },
+]
+
+# terraform_validate の retry/cleanup を自前で持ちたくないので、ここだけリモートに残す
+[[repos]]
+repo = "https://github.com/antonbabenko/pre-commit-terraform"
+rev = "v1.99.0"
+hooks = [
+  { id = "terraform_fmt" },
+  { id = "terraform_validate", args = [
+    "--hook-config=--retry-once-with-cleanup=true",
+    "--tf-init-args=-backend=false",
+  ] },
+  { id = "terraform_tflint" },
+]
+
+# 実行ファイルは .mise.toml で固定済み。rev との二重管理を避けて mise のものを直接呼ぶ
+[[repos]]
+repo = "local"
+hooks = [
+  { id = "gitleaks", name = "gitleaks（秘密の検出）", entry = "gitleaks git --pre-commit --redact --staged --verbose", language = "system", pass_filenames = false },
+  { id = "ryl", name = "ryl（YAML）", entry = "ryl", language = "system", types = ["yaml"] },
+  { id = "rumdl", name = "rumdl（Markdown）", entry = "rumdl check", language = "system", types = ["markdown"] },
+  { id = "terraform-docs", name = "terraform-docs（README の入力・出力表を更新）", entry = "sh -c 'terraform-docs -c .terraform-docs.yml terraform && terraform-docs -c .terraform-docs.yml terraform/modules/service'", language = "system", files = '^terraform/.*\.tf$', pass_filenames = false },
+  { id = "shellcheck", name = "shellcheck（シェル）", entry = "shellcheck", language = "system", types = ["shell"], require_serial = true },
+  { id = "actionlint", name = "actionlint（ワークフローの構文と式）", entry = "actionlint", language = "system", types = ["yaml"], files = '^\.github/workflows/' },
+  # actionlint は構文と式、zizmor はセキュリティ。見る観点が違うので両方かける。
+  # 手元と CI で結果を揃えるためオフラインに固定し、ネットワークが要る監査は CI の専用ステップで回す
+  { id = "zizmor", name = "zizmor（ワークフローのセキュリティ）", entry = "zizmor", language = "system", types = ["yaml"], files = '(\.github/(workflows/.*|dependabot\.ya?ml))|(action\.ya?ml)$', require_serial = true, args = ["--no-progress", "--offline"] },
+]
