@@ -12,7 +12,7 @@ Terraform の Docker provider でコンテナを立てる。概要とセット�
 | コマンド | 内容 |
 | --- | --- |
 | `mise run init` / `plan` / `apply` / `destroy` | `terraform/` での各操作 |
-| `mise run lint` | prek で全ファイル検査（fmt / validate / tflint / gitleaks / ryl / rumdl / shellcheck / actionlint / zizmor / terraform-docs） |
+| `mise run lint` | prek で全ファイル検査（fmt / validate / tflint / gitleaks / ryl / rumdl / tombi / shellcheck / actionlint / zizmor / terraform-docs） |
 | `mise run smoke` | OTLP にダミーを投げ、Prometheus / Loki への到達と scrub を確認 |
 | `prek run --all-files <hook-id>` | 個別のフックだけ走らせる（例: `terraform_tflint`, `rumdl`） |
 
@@ -38,6 +38,8 @@ Grafana からこの 3 つを読む。コンテナ間は `local.hosts` の名前
 - **`terraform/README.md` と `modules/service/README.md` のマーカー内は terraform-docs の生成物**。手で書かない（rumdl も除外している）。`.tf` を変えると prek が書き換える
 - **Collector の `attributes/scrub` と `resource/scrub` がプライバシー境界**。プロンプト本文・ツール引数・`user.email` をここで落とす。属性を増減したら `mise run smoke` で落ちていることを確認する（smoke test は `prompt` が残っていたら失敗する）
 - **Codex はメトリクスを送ってこない**（0.150 時点）。Codex 系のパネルはすべて Loki のイベントから集計し、コストは `config/prometheus-rules.yml.tftpl` の recording rule で `codex_model_prices` の単価から推計する（ADR 0006 / 0010）
+- **TOML の inline table の中で配列を複数行に書かない**。tombi が inline table ごと展開して TOML 1.1 の書式にし、TOML 1.0 のパーサが読めなくなる。1 行に畳む（ADR 0015）
+- **`tombi lint` のスキーマ検証はフックでは効かないことがある**。手元は `--offline` でキャッシュにあるスキーマしか当てないため、確実に落ちるのは CI のオンライン実行だけ
 - **イメージはパッチバージョンまで固定**（`variables.tf` の `images`）。GitHub Actions はコミット SHA で固定（ADR 0008 / 0011）
 
 ## Claude Code の設定

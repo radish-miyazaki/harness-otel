@@ -28,6 +28,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: zizmor --no-progress .
+      - name: tombi（オンライン監査。フックの --offline では引けない JSON Schema を当てる）
+        run: tombi lint .
 
   terraform:
     runs-on: ubuntu-latest
