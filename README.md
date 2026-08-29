@@ -10,6 +10,8 @@ Codex CLI  ───┘   :4317/:4318      └─ Loki ───────┘
                                    （Tempo は enable_tracing=true のときだけ）
 ```
 
+![アーキテクチャ図](docs/architecture.svg)
+
 設計上の判断は [docs/adr](docs/adr) にあります（元の仕様書はリポジトリには含めていません）。
 
 ## 必要なもの

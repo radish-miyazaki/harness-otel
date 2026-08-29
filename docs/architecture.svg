@@ -1,0 +1,236 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1000" width="1440" height="1000" font-family="'Inter','Hiragino Sans','Noto Sans JP','Helvetica Neue',Arial,sans-serif">
+
+  <defs>
+    <style>
+      .ink      { fill: #17202B; }
+      .muted    { fill: #5C6B7A; }
+      .faint    { fill: #8A97A4; }
+      .mono     { font-family: 'SFMono-Regular','Menlo','Consolas',monospace; }
+      .h1       { font-size: 27px; font-weight: 700; letter-spacing: -0.3px; }
+      .h2       { font-size: 14px; font-weight: 700; letter-spacing: 1.6px; }
+      .boxtitle { font-size: 17px; font-weight: 700; }
+      .boxsub   { font-size: 12px; }
+      .item     { font-size: 12.5px; }
+      .tiny     { font-size: 11px; }
+      .lbl      { font-size: 11.5px; font-weight: 600; }
+      .card     { fill: #FFFFFF; stroke: #C9D2DA; stroke-width: 1.5; }
+    </style>
+
+    <marker id="aM" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1F6FB2"/>
+    </marker>
+    <marker id="aL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#B58412"/>
+    </marker>
+    <marker id="aT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6E52A6"/>
+    </marker>
+  </defs>
+
+  <rect width="1440" height="1000" fill="#EDF1F4"/>
+
+  <!-- ==================== HEADER ==================== -->
+  <text x="56" y="56" class="ink h1">harness-otel: コーディングエージェントのテレメトリをローカルで可視化する</text>
+  <text x="56" y="82" class="muted" font-size="14">Claude Code / Codex CLI → OpenTelemetry Collector → ローカル保存 → Grafana</text>
+
+  <!-- ==================== COLUMN HEADERS ==================== -->
+  <g class="h2 faint">
+    <text x="56"   y="130">① ハーネス</text>
+    <text x="396"  y="130">② Collector</text>
+    <text x="796"  y="130">③ ストレージ</text>
+    <text x="1146" y="130">④ ダッシュボード</text>
+  </g>
+  <line x1="56"   x2="326"  y1="140" y2="140" stroke="#B9C4CE" stroke-width="1.5"/>
+  <text x="56" y="164" class="lbl mono" fill="#5C6B7A">OTLP / gRPC :4317 で送信</text>
+  <line x1="396"  x2="726"  y1="140" y2="140" stroke="#B9C4CE" stroke-width="1.5"/>
+  <line x1="796"  x2="1076" y1="140" y2="140" stroke="#B9C4CE" stroke-width="1.5"/>
+  <line x1="1146" x2="1384" y1="140" y2="140" stroke="#B9C4CE" stroke-width="1.5"/>
+
+  <!-- ==================== TRUST BOUNDARY ==================== -->
+  <rect x="376" y="164" width="1032" height="446" rx="6" fill="none" stroke="#14705F" stroke-width="1.5" stroke-dasharray="7 5"/>
+  <rect x="376" y="152" width="290" height="22" rx="3" fill="#14705F"/>
+  <text x="388" y="167.5" fill="#FFFFFF" class="tiny mono" font-weight="700">127.0.0.1 のみ待受 / 外部送信なし</text>
+
+  <!-- ==================== SOURCES ==================== -->
+
+  <!-- Claude Code -->
+  <rect x="56" y="182" width="270" height="176" rx="5" class="card"/>
+  <rect x="56" y="182" width="5" height="176" fill="#17202B"/>
+  <text x="76" y="209" class="ink boxtitle">Claude Code CLI</text>
+  <text x="76" y="228" class="faint tiny mono">~/.claude/settings.json → env</text>
+  <line x1="76" x2="310" y1="238" y2="238" stroke="#E1E7EC" stroke-width="1"/>
+  <g class="item">
+    <circle cx="81" cy="255" r="3.5" fill="#1F6FB2"/>
+    <text x="93" y="259" class="ink">metrics</text>
+    <text x="152" y="259" class="muted tiny mono">cost / token / session</text>
+    <circle cx="81" cy="278" r="3.5" fill="#B58412"/>
+    <text x="93" y="282" class="ink">logs (events)</text>
+    <text x="186" y="282" class="muted tiny mono">tool / api / mcp</text>
+    <circle cx="81" cy="301" r="3.5" fill="#FFFFFF" stroke="#6E52A6" stroke-width="1.5"/>
+    <text x="93" y="305" class="muted">traces</text>
+    <text x="142" y="305" class="faint tiny">ベータ</text>
+  </g>
+  <rect x="76" y="318" width="234" height="26" rx="3" fill="#F2F5F8"/>
+  <text x="86" y="335" class="muted tiny mono">CLAUDE_CODE_ENABLE_TELEMETRY=1</text>
+
+  <!-- Codex -->
+  <rect x="56" y="392" width="270" height="150" rx="5" class="card"/>
+  <rect x="56" y="392" width="5" height="150" fill="#17202B"/>
+  <text x="76" y="419" class="ink boxtitle">Codex CLI</text>
+  <text x="76" y="438" class="faint tiny mono">~/.codex/config.toml [otel]</text>
+  <line x1="76" x2="310" y1="448" y2="448" stroke="#E1E7EC" stroke-width="1"/>
+  <g class="item">
+    <circle cx="81" cy="465" r="3.5" fill="#B58412"/>
+    <text x="93" y="469" class="ink">logs (events)</text>
+    <text x="186" y="469" class="muted tiny mono">api / tool / sse</text>
+    <circle cx="81" cy="488" r="3.5" fill="#FFFFFF" stroke="#1F6FB2" stroke-width="1.5"/>
+    <text x="93" y="492" class="muted">metrics</text>
+    <text x="152" y="492" class="faint tiny">未到達・ログから集計</text>
+  </g>
+  <rect x="76" y="504" width="234" height="26" rx="3" fill="#FCF3E0"/>
+  <text x="86" y="521" class="tiny" fill="#8A6410" font-weight="600">プロジェクト設定では otel は無視される</text>
+
+  <!-- arrows: sources -> collector -->
+  <line x1="326" x2="392" y1="255" y2="255" stroke="#1F6FB2" stroke-width="2"   marker-end="url(#aM)"/>
+  <line x1="326" x2="392" y1="278" y2="278" stroke="#B58412" stroke-width="2"   marker-end="url(#aL)"/>
+  <line x1="326" x2="392" y1="301" y2="301" stroke="#6E52A6" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#aT)"/>
+
+  <line x1="326" x2="392" y1="465" y2="465" stroke="#B58412" stroke-width="2" marker-end="url(#aL)"/>
+  <line x1="326" x2="392" y1="488" y2="488" stroke="#1F6FB2" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#aM)"/>
+
+  <!-- ==================== COLLECTOR ==================== -->
+  <rect x="396" y="182" width="330" height="392" rx="5" fill="#FFFFFF" stroke="#14705F" stroke-width="2"/>
+  <rect x="396" y="182" width="330" height="46" rx="5" fill="#14705F"/>
+  <rect x="396" y="216" width="330" height="12" fill="#14705F"/>
+  <text x="416" y="212" fill="#FFFFFF" class="boxtitle">OpenTelemetry Collector</text>
+  <text x="416" y="248" class="faint tiny mono">:4317 gRPC　:4318 HTTP</text>
+
+  <!-- receivers -->
+  <rect x="416" y="262" width="290" height="58" rx="4" fill="#F2F7F6" stroke="#BBD3CE"/>
+  <text x="430" y="282" class="ink" font-size="13.5" font-weight="700">Receivers</text>
+  <text x="430" y="302" class="muted tiny mono">otlp { grpc, http }</text>
+  <text x="596" y="282" class="faint tiny">入口</text>
+
+  <!-- processors -->
+  <rect x="416" y="334" width="290" height="118" rx="4" fill="#F2F7F6" stroke="#BBD3CE"/>
+  <text x="430" y="354" class="ink" font-size="13.5" font-weight="700">Processors</text>
+  <text x="596" y="354" class="faint tiny">加工</text>
+  <text x="430" y="374" class="muted tiny mono">memory_limiter　batch</text>
+  <text x="430" y="394" class="mono tiny" fill="#A3341F" font-weight="700">resource/scrub</text>
+  <text x="430" y="409" class="faint tiny">user.email（OAuth のメールアドレス）を削除</text>
+  <text x="430" y="428" class="mono tiny" fill="#A3341F" font-weight="700">attributes/scrub</text>
+  <text x="430" y="443" class="faint tiny">prompt / response / arguments など削除</text>
+
+  <!-- exporters -->
+  <rect x="416" y="466" width="290" height="88" rx="4" fill="#F2F7F6" stroke="#BBD3CE"/>
+  <text x="430" y="486" class="ink" font-size="13.5" font-weight="700">Exporters</text>
+  <text x="596" y="486" class="faint tiny">出口</text>
+  <circle cx="435" cy="504" r="3.5" fill="#1F6FB2"/><text x="447" y="508" class="muted tiny mono">prometheus :9464</text>
+  <circle cx="435" cy="524" r="3.5" fill="#B58412"/><text x="447" y="528" class="muted tiny mono">otlphttp/loki</text>
+  <circle cx="435" cy="544" r="3.5" fill="#FFFFFF" stroke="#6E52A6" stroke-width="1.5"/><text x="447" y="548" class="faint tiny mono">otlp/tempo（enable_tracing=true 時）</text>
+
+  <!-- arrows: collector -> storage -->
+  <line x1="726" x2="792" y1="240" y2="240" stroke="#1F6FB2" stroke-width="2" marker-end="url(#aM)"/>
+  <text x="734" y="231" class="tiny mono faint">scrape</text>
+  <line x1="726" x2="792" y1="368" y2="368" stroke="#B58412" stroke-width="2" marker-end="url(#aL)"/>
+  <line x1="726" x2="792" y1="496" y2="496" stroke="#6E52A6" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#aT)"/>
+
+  <!-- ==================== STORAGE ==================== -->
+
+  <!-- Prometheus -->
+  <rect x="796" y="196" width="280" height="88" rx="5" class="card"/>
+  <rect x="796" y="196" width="5" height="88" fill="#1F6FB2"/>
+  <text x="816" y="223" class="ink boxtitle">Prometheus</text>
+  <text x="816" y="244" class="muted tiny">メトリクス時系列 ／ PromQL</text>
+  <text x="816" y="266" class="tiny" fill="#A3341F" font-weight="600">累積値（cumulative）で送る設定が必要</text>
+
+  <!-- Loki -->
+  <rect x="796" y="324" width="280" height="88" rx="5" class="card"/>
+  <rect x="796" y="324" width="5" height="88" fill="#B58412"/>
+  <text x="816" y="351" class="ink boxtitle">Loki</text>
+  <text x="816" y="372" class="muted tiny">イベント／ログ保存・検索</text>
+  <text x="816" y="394" class="faint tiny mono">Codex 系パネルは LogQL で集計</text>
+
+  <!-- Tempo -->
+  <rect x="796" y="452" width="280" height="88" rx="5" fill="#F7F9FA" stroke="#B9C4CE" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="816" y="479" class="muted boxtitle">Tempo</text>
+  <text x="816" y="500" class="faint tiny">トレース保存（enable_tracing=true 時のみ）</text>
+  <text x="816" y="522" class="faint tiny mono">1 プロンプト = 1 トレースで保存</text>
+
+  <!-- arrows: storage -> grafana -->
+  <line x1="1076" x2="1142" y1="240" y2="270" stroke="#1F6FB2" stroke-width="2" marker-end="url(#aM)"/>
+  <line x1="1076" x2="1142" y1="368" y2="368" stroke="#B58412" stroke-width="2" marker-end="url(#aL)"/>
+  <line x1="1076" x2="1142" y1="496" y2="466" stroke="#6E52A6" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#aT)"/>
+
+  <!-- ==================== GRAFANA ==================== -->
+  <rect x="1146" y="196" width="238" height="344" rx="5" class="card"/>
+  <rect x="1146" y="196" width="5" height="344" fill="#17202B"/>
+  <text x="1166" y="223" class="ink boxtitle">Grafana</text>
+  <text x="1166" y="242" class="faint tiny mono">:3000</text>
+  <line x1="1166" x2="1368" y1="254" y2="254" stroke="#E1E7EC" stroke-width="1"/>
+
+  <text x="1166" y="278" class="ink item" font-weight="700">ダッシュボード</text>
+  <g class="item">
+    <rect x="1166" y="290" width="202" height="46" rx="3" fill="#F2F5F8"/>
+    <text x="1178" y="308" class="ink">コスト</text>
+    <text x="1178" y="326" class="faint tiny">モデル別・キャッシュ効率・円換算</text>
+
+    <rect x="1166" y="344" width="202" height="46" rx="3" fill="#F2F5F8"/>
+    <text x="1178" y="362" class="ink">利用状況</text>
+    <text x="1178" y="380" class="faint tiny">セッション・稼働時間・変更行数</text>
+
+    <rect x="1166" y="398" width="202" height="46" rx="3" fill="#F2F5F8"/>
+    <text x="1178" y="416" class="ink">ガバナンス</text>
+    <text x="1178" y="434" class="faint tiny">承認/拒否・権限モード・MCP</text>
+
+    <rect x="1166" y="452" width="202" height="46" rx="3" fill="#F2F5F8"/>
+    <text x="1178" y="470" class="ink">信頼性</text>
+    <text x="1178" y="488" class="faint tiny">API エラー・Collector 失敗</text>
+  </g>
+  <text x="1166" y="522" class="faint tiny">コストは円換算（$usdjpy 変数）</text>
+
+  <!-- ==================== LEGEND ==================== -->
+  <text x="56" y="662" class="h2 faint">凡例</text>
+  <line x1="56" x2="1384" y1="672" y2="672" stroke="#B9C4CE" stroke-width="1.5"/>
+
+  <g transform="translate(56,690)" class="item">
+    <line x1="0" x2="34" y1="12" y2="12" stroke="#1F6FB2" stroke-width="2.5"/>
+    <text x="46" y="16" class="ink">Metrics</text>
+    <text x="110" y="16" class="muted tiny">数を数えたもの — コスト・トークン・件数</text>
+
+    <line x1="0" x2="34" y1="40" y2="40" stroke="#B58412" stroke-width="2.5"/>
+    <text x="46" y="44" class="ink">Logs / Events</text>
+    <text x="146" y="44" class="muted tiny">起きた出来事 — ツール実行・権限判断・MCP 接続</text>
+
+    <line x1="0" x2="34" y1="68" y2="68" stroke="#6E52A6" stroke-width="2.5" stroke-dasharray="5 4"/>
+    <text x="46" y="72" class="ink">Traces</text>
+    <text x="110" y="72" class="muted tiny">因果関係 — 1 プロンプト = 1 トレース（Claude Code ではベータ）</text>
+  </g>
+
+  <!-- ==================== NOTES ==================== -->
+  <text x="740" y="662" class="h2 faint">設計上の要点</text>
+
+  <g transform="translate(740,684)" class="item">
+    <rect x="0" y="0" width="644" height="1" fill="none"/>
+
+    <text x="0" y="16" class="ink" font-weight="700">1.</text>
+    <text x="22" y="16" class="ink">Collector を必ず経由させる</text>
+    <text x="22" y="34" class="muted tiny">保存先を変えても Claude Code / Codex の設定は触らない。個人情報の削除も Collector 1 か所で行う。</text>
+
+    <text x="0" y="62" class="ink" font-weight="700">2.</text>
+    <text x="22" y="62" class="ink">プロンプト本文は既定で送らない</text>
+    <text x="22" y="80" class="muted tiny">OTEL_LOG_USER_PROMPTS / TOOL_DETAILS / RAW_API_BODIES はすべて無効のまま運用する。</text>
+
+    <text x="0" y="108" class="ink" font-weight="700">3.</text>
+    <text x="22" y="108" class="ink">ゲートウェイでは見えない領域がある</text>
+    <text x="22" y="126" class="muted tiny">ファイル改変・シェル実行・権限判断はハーネス内側からしか観測できない。</text>
+
+    <text x="0" y="154" class="ink" font-weight="700">4.</text>
+    <text x="22" y="154" class="ink">コスト値は推計である</text>
+    <text x="22" y="172" class="muted tiny">claude_code.cost.usage は Anthropic が算出する推計値で、請求額ではない。Codex は USD 指標がなくログのトークン数 × 単価で推計。</text>
+  </g>
+
+  <!-- footer -->
+  <line x1="56" x2="1384" y1="922" y2="922" stroke="#B9C4CE" stroke-width="1"/>
+  <text x="56" y="944" class="faint tiny">出典: code.claude.com/docs/en/monitoring-usage ／ developers.openai.com/codex/config-advanced ／ opentelemetry.io/docs/collector</text>
+</svg>
