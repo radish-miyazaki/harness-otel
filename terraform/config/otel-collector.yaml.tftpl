@@ -30,7 +30,6 @@ processors:
         action: delete
       - key: response_body
         action: delete
-
   # OAuth 認証時は user.email がリソース属性として常に付く。ローカル保存でも個人情報は残さない
   resource/scrub:
     attributes:
@@ -57,35 +56,17 @@ service:
   pipelines:
     metrics:
       receivers: [otlp]
-      processors: [memory_limiter, batch]
-        # OAuth 認証時は user.email がリソース属性として常に付く。ローカル保存でも個人情報は残さない
-  resource/scrub:
-    attributes:
-      - key: user.email
-        action: delete
-
-exporters: [prometheus]
+      processors: [memory_limiter, resource/scrub, batch]
+      exporters: [prometheus]
     logs:
       receivers: [otlp]
       processors: [memory_limiter, resource/scrub, attributes/scrub, batch]
-        # OAuth 認証時は user.email がリソース属性として常に付く。ローカル保存でも個人情報は残さない
-  resource/scrub:
-    attributes:
-      - key: user.email
-        action: delete
-
-exporters: [otlphttp/loki]
+      exporters: [otlphttp/loki]
 %{ if enable_tracing ~}
     traces:
       receivers: [otlp]
       processors: [memory_limiter, resource/scrub, attributes/scrub, batch]
-        # OAuth 認証時は user.email がリソース属性として常に付く。ローカル保存でも個人情報は残さない
-  resource/scrub:
-    attributes:
-      - key: user.email
-        action: delete
-
-exporters: [otlp/tempo]
+      exporters: [otlp/tempo]
 %{ endif ~}
   telemetry:
     logs:
