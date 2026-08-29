@@ -3,14 +3,14 @@
 Claude Code と Codex CLI が出す OpenTelemetry のテレメトリを、手元の PC 1 台で受けて眺めるための基盤です。
 Collector / Prometheus / Loki / Grafana を Terraform（Docker provider）で立ち上げます。外部の SaaS には何も送りません。
 
-```
+```text
 Claude Code ──┐                    ┌─ Prometheus ─┐
               ├─ OTLP ─▶ Collector ┤              ├─▶ Grafana (127.0.0.1:3000)
 Codex CLI  ───┘   :4317/:4318      └─ Loki ───────┘
                                    （Tempo は enable_tracing=true のときだけ）
 ```
 
-仕様書は [docs/spec/harness-observability-spec.md](docs/spec/harness-observability-spec.md)、設計上の判断は [docs/adr](docs/adr) にあります。
+設計上の判断は [docs/adr](docs/adr) にあります（元の仕様書はリポジトリには含めていません）。
 
 ## 必要なもの
 
@@ -30,7 +30,7 @@ mise run smoke                    # ダミーデータを流して Prometheus / 
 `.env` は gitignore 済みで、mise がシェルに読み込みます。パスワードを Terraform のファイルに書く必要はありません。
 OrbStack を使っている場合は `TF_VAR_docker_host=unix:///Users/<you>/.orbstack/run/docker.sock` を `.env` に足してください。
 
-起動後、Grafana は http://127.0.0.1:3000 で開けます（ユーザー `admin`、パスワードは `.env` の値）。
+起動後、Grafana は <http://127.0.0.1:3000> で開けます（ユーザー `admin`、パスワードは `.env` の値）。
 「Harness」フォルダに「コスト」「利用状況」「ガバナンス」「信頼性」の 4 枚が入っています。
 
 ## ハーネス側の設定
@@ -52,7 +52,7 @@ OTel の設定は起動時にしか読まれないので、書いたあとはハ
 | `mise run plan` | 変更内容の確認 |
 | `mise run apply` | 起動・設定反映（設定ファイルを変えたらこれ） |
 | `mise run destroy` | コンテナとネットワークを削除。ボリューム（蓄積データ）は残る |
-| `mise run lint` | prek で fmt / validate / tflint / gitleaks / yamllint などを一括実行 |
+| `mise run lint` | prek で fmt / validate / tflint / gitleaks / ryl / rumdl などを一括実行 |
 | `mise run hooks-install` | commit 時に上記 lint を走らせる Git フックを入れる。フック内で tflint などを呼ぶので、シェルで `mise activate` しておくこと |
 
 ## 変えたくなりそうな値

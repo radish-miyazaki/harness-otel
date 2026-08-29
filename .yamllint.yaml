@@ -1,3 +1,4 @@
+# ryl（yamllint 互換）が読む
 extends: default
 rules:
   line-length:

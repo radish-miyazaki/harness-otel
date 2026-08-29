@@ -15,3 +15,6 @@ crash.log
 .DS_Store
 .mise.local.toml
 .claude/settings.local.json
+
+# 仕様書は手元でだけ持つ
+docs/spec/

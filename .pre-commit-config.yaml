@@ -24,11 +24,20 @@ repos:
           - --hook-config=--retry-once-with-cleanup=true
           - --tf-init-args=-backend=false
       - id: terraform_tflint
-  - repo: https://github.com/adrienverge/yamllint
-    rev: v1.38.0
+  # ryl と rumdl は mise で入れたものをそのまま使う（upstream のフック定義に依存しない）
+  - repo: local
     hooks:
-      - id: yamllint
+      - id: ryl
+        name: ryl（YAML）
+        entry: ryl -c .yamllint.yaml
+        language: system
+        types: [yaml]
         exclude: \.tftpl$
+      - id: rumdl
+        name: rumdl（Markdown）
+        entry: rumdl check
+        language: system
+        types: [markdown]
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:

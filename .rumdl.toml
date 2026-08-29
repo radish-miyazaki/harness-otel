@@ -1,0 +1,11 @@
+# 日本語の文章が前提。行長は意味を持たないので見ない
+[global]
+exclude = ["docs/spec", ".terraform"]
+disable = ["MD013"]
+
+[MD007]
+indent = 2
+
+# 見出し・箇条書きの前後の空行は日本語でも守る。表・コードブロックの直前後も同様
+[MD024]
+siblings_only = true
