@@ -12,7 +12,7 @@ Terraform の Docker provider でコンテナを立てる。概要とセット�
 | コマンド | 内容 |
 | --- | --- |
 | `mise run init` / `plan` / `apply` / `destroy` | `terraform/` での各操作 |
-| `mise run lint` | prek で全ファイル検査（fmt / validate / tflint / gitleaks / ryl / rumdl / shellcheck / actionlint / zizmor / terraform-docs） |
+| `mise run lint` | prek で全ファイル検査（fmt / validate / tflint / gitleaks / ryl / rumdl / tombi / shellcheck / actionlint / zizmor / terraform-docs） |
 | `mise run smoke` | OTLP にダミーを投げ、Prometheus / Loki への到達と scrub を確認 |
 | `prek run --all-files <hook-id>` | 個別のフックだけ走らせる（例: `terraform_tflint`, `rumdl`） |
 
@@ -38,6 +38,8 @@ Grafana からこの 3 つを読む。コンテナ間は `local.hosts` の名前
 - **`terraform/README.md` と `modules/service/README.md` のマーカー内は terraform-docs の生成物**。手で書かない（rumdl も除外している）。`.tf` を変えると prek が書き換える
 - **Collector の `attributes/scrub` と `resource/scrub` がプライバシー境界**。プロンプト本文・ツール引数・`user.email` をここで落とす。属性を増減したら `mise run smoke` で落ちていることを確認する（smoke test は `prompt` が残っていたら失敗する）
 - **Codex はメトリクスを送ってこない**（0.150 時点）。Codex 系のパネルはすべて Loki のイベントから集計し、コストは `config/prometheus-rules.yml.tftpl` の recording rule で `codex_model_prices` の単価から推計する（ADR 0006 / 0010）
+- **TOML の inline table の中で配列を複数行に書かない**。tombi が inline table ごと展開して TOML 1.1 の書式にし、TOML 1.0 のパーサが読めなくなる。1 行に畳む（ADR 0015）
+- **`tombi lint` のスキーマ検証はフックでは効かないことがある**。手元は `--offline` でキャッシュにあるスキーマしか当てないため、確実に落ちるのは CI のオンライン実行だけ
 - **イメージはパッチバージョンまで固定**（`variables.tf` の `images`）。GitHub Actions はコミット SHA で固定（ADR 0008 / 0011）
 
 ## Claude Code の設定
@@ -63,11 +65,12 @@ public repo。値をファイルに書かない。
 
 - タスクは `.claude/worktrees/` 配下に worktree を切って進める（gitignore 済み）。main の作業ツリーを触らないので、lint やスタックの起動状態を巻き込まずに済む
 - ブランチ名は `<type>/<簡潔な機能名>`。type はコミットと揃える（例: `feat/add-claude-md`, `chore/harden-github-actions`）
+- コミットは論理的単位で分ける。ツールの追加とその ADR、方針の追記が同じ作業から出ても別のコミットにする。1 つのファイルが複数の単位にまたがるときは、単位ごとに書き戻して順に積む
 - コミットメッセージは Conventional Commits に従う。`<type>: <要約>` で、要約は他のドキュメントと同じく日本語（例: `chore: prek と ryl の設定をネイティブ形式に移す`）
 
 ## 書き方
 
 - ドキュメントもコメントも日本語。AI 臭い表現（「実現」「活用」「包括的」、意味のない三点列挙、両論併記）を避ける
 - コードコメントは why だけ。what や変更履歴は書かない
-- 設計判断は `docs/adr/` に残す。`template.md` を `NNNN-english-kebab-case.md` にコピーし、`docs/adr/README.md` の表に 1 行足す。番号は連番で欠番も再利用もしない（次は 0015）
+- 設計判断は `docs/adr/` に残す。`template.md` を `NNNN-english-kebab-case.md` にコピーし、`docs/adr/README.md` の表に 1 行足す。番号は連番で欠番も再利用もしない（次は 0016）
 - 構築は Terraform。Compose は使わない

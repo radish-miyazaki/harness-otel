@@ -53,7 +53,7 @@ OTel の設定は起動時にしか読まれないので、書いたあとはハ
 | `mise run plan` | 変更内容の確認 |
 | `mise run apply` | 起動・設定反映（設定ファイルを変えたらこれ） |
 | `mise run destroy` | コンテナとネットワークを削除。ボリューム（蓄積データ）は残る |
-| `mise run lint` | prek で fmt / validate / tflint / gitleaks / ryl / rumdl などを一括実行 |
+| `mise run lint` | prek で fmt / validate / tflint / gitleaks / ryl / rumdl / tombi などを一括実行 |
 | `mise run hooks-install` | commit 時に上記 lint を走らせる Git フックを入れる。フック内で tflint などを呼ぶので、シェルで `mise activate` しておくこと |
 
 ## ディレクトリ

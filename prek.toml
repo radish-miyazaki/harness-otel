@@ -19,10 +19,8 @@ repo = "https://github.com/antonbabenko/pre-commit-terraform"
 rev = "v1.99.0"
 hooks = [
   { id = "terraform_fmt" },
-  { id = "terraform_validate", args = [
-    "--hook-config=--retry-once-with-cleanup=true",
-    "--tf-init-args=-backend=false",
-  ] },
+  # 配列を複数行にすると tombi が inline table ごと TOML 1.1 の書式に展開するので 1 行に畳む
+  { id = "terraform_validate", args = ["--hook-config=--retry-once-with-cleanup=true", "--tf-init-args=-backend=false"] },
   { id = "terraform_tflint" },
 ]
 
@@ -33,6 +31,10 @@ hooks = [
   { id = "gitleaks", name = "gitleaks（秘密の検出）", entry = "gitleaks git --pre-commit --redact --staged --verbose", language = "system", pass_filenames = false },
   { id = "ryl", name = "ryl（YAML）", entry = "ryl", language = "system", types = ["yaml"] },
   { id = "rumdl", name = "rumdl（Markdown）", entry = "rumdl check", language = "system", types = ["markdown"] },
+  # 手元は --offline に固定して zizmor と揃える。ただし --offline はキャッシュ済みのスキーマしか見ないので、
+  # スキーマ違反を確実に捕まえるのは CI のオンライン実行の側（ADR 0015）
+  { id = "tombi-format", name = "tombi（TOML の整形）", entry = "tombi format --offline", language = "system", types = ["toml"] },
+  { id = "tombi-lint", name = "tombi（TOML）", entry = "tombi lint --offline", language = "system", types = ["toml"] },
   { id = "terraform-docs", name = "terraform-docs（README の入力・出力表を更新）", entry = "sh -c 'terraform-docs -c .terraform-docs.yml terraform && terraform-docs -c .terraform-docs.yml terraform/modules/service'", language = "system", files = '^terraform/.*\.tf$', pass_filenames = false },
   { id = "shellcheck", name = "shellcheck（シェル）", entry = "shellcheck", language = "system", types = ["shell"], require_serial = true },
   { id = "actionlint", name = "actionlint（ワークフローの構文と式）", entry = "actionlint", language = "system", types = ["yaml"], files = '^\.github/workflows/' },

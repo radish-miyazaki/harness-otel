@@ -1,13 +1,13 @@
 # [rules] は書いたものだけが有効になる（yamllint の extends: default と逆）ので、既定値のルールも省略せず並べる
 ignore = [
-    # Terraform のディレクティブが混ざるので YAML として妥当ではない
-    "*.tftpl",
+  # Terraform のディレクティブが混ざるので YAML として妥当ではない
+  "*.tftpl",
 ]
 
 [files]
 yaml = [
-    "*.yaml",
-    "*.yml",
+  "*.yaml",
+  "*.yml",
 ]
 
 [rules]
