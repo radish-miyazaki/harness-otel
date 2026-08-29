@@ -40,7 +40,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "sum by (status_code) (count_over_time({service_name=\"claude-code\"} | event_name=\"claude_code.api_error\" [$__auto]))",
+          "expr": "sum by (status_code) (count_over_time({service_name=\"claude-code\"} | event_name=\"api_error\" [$__auto]))",
           "legendFormat": "{{status_code}}"
         }
       ],
@@ -71,7 +71,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "sum(count_over_time({service_name=\"claude-code\"} | event_name=\"claude_code.api_retries_exhausted\" [$__range]))",
+          "expr": "sum(count_over_time({service_name=\"claude-code\"} | event_name=\"api_retries_exhausted\" [$__range]))",
           "legendFormat": "__auto"
         }
       ],
@@ -102,7 +102,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "sum(count_over_time({service_name=\"claude-code\"} | event_name=\"claude_code.compaction\" [$__range]))",
+          "expr": "sum(count_over_time({service_name=\"claude-code\"} | event_name=\"compaction\" [$__range]))",
           "legendFormat": "__auto"
         }
       ],
@@ -133,7 +133,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "sum by (error_type) (count_over_time({service_name=\"claude-code\"} | event_name=\"claude_code.tool_result\" | success=\"false\" [$__auto]))",
+          "expr": "sum by (error_type) (count_over_time({service_name=\"claude-code\"} | event_name=\"tool_result\" | success=\"false\" [$__auto]))",
           "legendFormat": "{{error_type}}"
         }
       ],

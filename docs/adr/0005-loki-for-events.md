@@ -19,5 +19,6 @@ exporter が末尾に `/v1/logs` を付けるので、Loki 側の実パスは `/
 ## 結果
 
 - 2026-08-29 に smoke test で確認済み: OTLP で送ったログが `{service_name="smoke-test"}` で引け、`prompt` 属性は Collector で落とされていた
-- リソース属性 `service.name` はラベル `service_name` に、ログ属性は structured metadata になる。LogQL は `{service_name="claude-code"} | event_name="..."` の形
+- リソース属性 `service.name` はラベル `service_name` に、ログ属性は structured metadata になる。LogQL は `{service_name="claude-code"} | event_name="tool_result"` の形。Claude Code 2.1 系では `event_name` に `claude_code.` の接頭辞は付かない（実測）
+- Claude Code はリソース属性に `user.email` を付けてくる。Prometheus 側にもラベルとして展開されるため、`resource/scrub` プロセッサで metrics / logs 両方から落とす
 - 起動直後に `error getting ingester clients err="empty ring"` が 1 回出るが、リングが揃うまでの一時的なもので無視してよい

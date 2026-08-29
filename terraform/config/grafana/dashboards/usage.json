@@ -71,7 +71,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum by (type) (increase(claude_code_active_time_total_seconds_total[1d]))",
+          "expr": "sum by (type) (increase(claude_code_active_time_seconds_total[1d]))",
           "legendFormat": "{{type}}"
         }
       ],
@@ -135,7 +135,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "sum by (tool_name) (count_over_time({service_name=\"claude-code\"} | event_name=\"claude_code.tool_result\" [$__auto]))",
+          "expr": "sum by (tool_name) (count_over_time({service_name=\"claude-code\"} | event_name=\"tool_result\" [$__auto]))",
           "legendFormat": "{{tool_name}}"
         }
       ],

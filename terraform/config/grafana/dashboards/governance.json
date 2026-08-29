@@ -40,7 +40,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "sum(count_over_time({service_name=\"claude-code\"} | event_name=\"claude_code.permission_mode_changed\" | to_mode=\"bypassPermissions\" [$__range]))",
+          "expr": "sum(count_over_time({service_name=\"claude-code\"} | event_name=\"permission_mode_changed\" | to_mode=\"bypassPermissions\" [$__range]))",
           "legendFormat": "__auto"
         }
       ],
@@ -74,7 +74,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "sum(count_over_time({service_name=\"claude-code\"} | event_name=\"claude_code.mcp_server_connection\" | status=\"failed\" [$__range]))",
+          "expr": "sum(count_over_time({service_name=\"claude-code\"} | event_name=\"mcp_server_connection\" | status=\"failed\" [$__range]))",
           "legendFormat": "__auto"
         }
       ],
@@ -200,7 +200,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "sum by (tool_name, decision) (count_over_time({service_name=\"claude-code\"} | event_name=\"claude_code.tool_decision\" [$__auto]))",
+          "expr": "sum by (tool_name, decision) (count_over_time({service_name=\"claude-code\"} | event_name=\"tool_decision\" [$__auto]))",
           "legendFormat": "{{tool_name}} / {{decision}}"
         }
       ],
@@ -262,7 +262,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "{service_name=\"claude-code\"} | event_name=\"claude_code.plugin_loaded\"",
+          "expr": "{service_name=\"claude-code\"} | event_name=\"plugin_loaded\"",
           "legendFormat": "__auto"
         }
       ],
