@@ -1,4 +1,22 @@
 {
+  "permissions": {
+    "deny": [
+      "mcp__docker__create_container",
+      "mcp__docker__run_container",
+      "mcp__docker__recreate_container",
+      "mcp__docker__start_container",
+      "mcp__docker__stop_container",
+      "mcp__docker__remove_container",
+      "mcp__docker__build_image",
+      "mcp__docker__push_image",
+      "mcp__docker__pull_image",
+      "mcp__docker__remove_image",
+      "mcp__docker__create_network",
+      "mcp__docker__remove_network",
+      "mcp__docker__create_volume",
+      "mcp__docker__remove_volume"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -27,6 +45,19 @@
           {
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/format-on-edit.sh"
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/notify-apply-needed.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check-adr.sh"
           }
         ]
       }

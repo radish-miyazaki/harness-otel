@@ -40,11 +40,21 @@ Grafana からこの 3 つを読む。コンテナ間は `local.hosts` の名前
 - **Codex はメトリクスを送ってこない**（0.150 時点）。Codex 系のパネルはすべて Loki のイベントから集計し、コストは `config/prometheus-rules.yml.tftpl` の recording rule で `codex_model_prices` の単価から推計する（ADR 0006 / 0010）
 - **イメージはパッチバージョンまで固定**（`variables.tf` の `images`）。GitHub Actions はコミット SHA で固定（ADR 0008 / 0011）
 
+## Claude Code の設定
+
+`.claude/` と `.mcp.json` はコミットする（`.claude/settings.local.json` だけ除く → ADR 0014）。
+
+- **スキル** — `new-adr`（ADR の採番・テンプレ展開・目次・CLAUDE.md の「次は NNNN」まで進める）、`add-service`（`modules/service` を 1 つ足す手順）
+- **サブエージェント** — `collector-privacy-reviewer`。scrub 境界の後退だけを見る。Collector 設定・ダッシュボード・recording rule を変えたら通す
+- **フック** — 上記の `guard-*` / `format-on-edit` に加えて、`notify-apply-needed.sh`（`config/` 編集時に apply が要ることを伝える）、`check-adr.sh`（ADR の採番違反を差し戻す）
+- **MCP** — Grafana（`--disable-write`。パネルの PromQL / LogQL を実データで検証する）と Docker（`list_*` と `fetch_container_logs` だけ。変更系は `permissions.deny`）。**どちらもスタック起動中でないと使えない**
+
 ## 秘密情報
 
 public repo。値をファイルに書かない。
 
 - `grafana_admin_password` は `.env`（gitignore 済み、mise がシェルに読み込む）の `TF_VAR_grafana_admin_password` から渡す。12 文字以上の validation あり
+- Grafana MCP を使うなら `.env` に `GRAFANA_SERVICE_ACCOUNT_TOKEN`（Viewer 権限のサービスアカウント）。任意で、なければ Docker MCP だけ動く
 - `.env` / `*.tfvars` / `*.tfstate` / `*.pem` / `*.key` への書き込みは `.claude/hooks/guard-secrets.sh` が拒否する。値の追加が要るときは `*.example` 側に書き、実値はユーザーに入れてもらう
 - `terraform destroy` や `docker volume rm` は `.claude/hooks/guard-destructive.sh` が確認を挟む
 - ハーネス側（`~/.claude/settings.json`、`~/.codex/config.toml`）の設定はユーザーが行う。リポジトリには `examples/` にサンプルだけ置く
@@ -59,5 +69,5 @@ public repo。値をファイルに書かない。
 
 - ドキュメントもコメントも日本語。AI 臭い表現（「実現」「活用」「包括的」、意味のない三点列挙、両論併記）を避ける
 - コードコメントは why だけ。what や変更履歴は書かない
-- 設計判断は `docs/adr/` に残す。`template.md` を `NNNN-english-kebab-case.md` にコピーし、`docs/adr/README.md` の表に 1 行足す。番号は連番で欠番も再利用もしない（次は 0014）
+- 設計判断は `docs/adr/` に残す。`template.md` を `NNNN-english-kebab-case.md` にコピーし、`docs/adr/README.md` の表に 1 行足す。番号は連番で欠番も再利用もしない（次は 0015）
 - 構築は Terraform。Compose は使わない
