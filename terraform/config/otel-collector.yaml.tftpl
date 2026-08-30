@@ -63,7 +63,7 @@ service:
   pipelines:
     metrics:
       receivers: [otlp]
-      processors: [memory_limiter, resource/scrub, batch]
+      processors: [memory_limiter, resource/scrub, attributes/scrub, batch]
       exporters: [prometheus]
     logs:
       receivers: [otlp]
