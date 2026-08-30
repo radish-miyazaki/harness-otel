@@ -82,7 +82,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d])) * $usdjpy",
+          "expr": "sum(max_over_time(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d])) * $usdjpy",
           "legendFormat": "__auto"
         }
       ],
@@ -116,7 +116,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d]))",
+          "expr": "sum(max_over_time(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d]))",
           "legendFormat": "__auto"
         }
       ],
@@ -149,7 +149,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(claude_code_token_usage_tokens_total{type=\"cacheRead\"}[$__range])) / sum(rate(claude_code_token_usage_tokens_total{type=~\"input|cacheRead\"}[$__range]))",
+          "expr": "sum(max_over_time(claude_code_token_usage_tokens_total{type=\"cacheRead\"}[$__range])) / sum(max_over_time(claude_code_token_usage_tokens_total{type=~\"input|cacheRead\"}[$__range]))",
           "legendFormat": "__auto"
         }
       ],
@@ -183,7 +183,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(claude_code_token_usage_tokens_total{query_source=\"subagent\"}[$__range])) / sum(rate(claude_code_token_usage_tokens_total[$__range]))",
+          "expr": "sum(max_over_time(claude_code_token_usage_tokens_total{query_source=\"subagent\"}[$__range])) / sum(max_over_time(claude_code_token_usage_tokens_total[$__range]))",
           "legendFormat": "__auto"
         }
       ],
@@ -216,7 +216,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum by (model) (increase(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d])) * $usdjpy",
+          "expr": "sum by (model) (max_over_time(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d])) * $usdjpy",
           "legendFormat": "{{model}}"
         }
       ],
@@ -249,7 +249,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum by (type) (rate(claude_code_token_usage_tokens_total{model=~\"$model\"}[$__rate_interval]))",
+          "expr": "sum by (type) (max_over_time(claude_code_token_usage_tokens_total{model=~\"$model\"}[$__rate_interval]))",
           "legendFormat": "{{type}}"
         }
       ],
@@ -282,7 +282,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum by (query_source) (rate(claude_code_token_usage_tokens_total[$__rate_interval]))",
+          "expr": "sum by (query_source) (max_over_time(claude_code_token_usage_tokens_total[$__rate_interval]))",
           "legendFormat": "{{query_source}}"
         }
       ],
