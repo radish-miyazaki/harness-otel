@@ -46,4 +46,7 @@ Codex 系のパネルが既に同じ形（[0010](0010-codex-from-logs.md)）。
 - `query_source 別トークン` の凡例が生の値（`sdk`、`agent:builtin:Explore` など）に変わる。
   Prometheus 側の `main` / `auxiliary` / `subagent` より細かい
 - `max_over_time` は窓をまたぐ系列を両方の窓に数える。日次パネルでは日付をまたいだセッションが両日に載る
+- `model` の値が両者で違う。メトリクスは `claude-opus-5[1m]` のように設定した名前のまま、
+  ログは `[1m]` の付かない `claude-opus-5`。Prometheus 由来の `$model` 変数を LogQL のフィルタに使うと、
+  該当モデルはエラーにならず黙って 0 件になる
 - Claude Code が `session_id` を持たない形でメトリクスを出すようになったら、この判断は見直す
