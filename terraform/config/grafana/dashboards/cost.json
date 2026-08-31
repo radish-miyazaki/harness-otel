@@ -82,7 +82,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d])) * $usdjpy",
+          "expr": "sum(max_over_time(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d])) * $usdjpy",
           "legendFormat": "__auto"
         }
       ],
@@ -116,7 +116,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d]))",
+          "expr": "sum(max_over_time(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d]))",
           "legendFormat": "__auto"
         }
       ],
@@ -149,7 +149,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(claude_code_token_usage_tokens_total{type=\"cacheRead\"}[$__range])) / sum(rate(claude_code_token_usage_tokens_total{type=~\"input|cacheRead\"}[$__range]))",
+          "expr": "sum(max_over_time(claude_code_token_usage_tokens_total{type=\"cacheRead\"}[$__range])) / sum(max_over_time(claude_code_token_usage_tokens_total{type=~\"input|cacheRead\"}[$__range]))",
           "legendFormat": "__auto"
         }
       ],
@@ -183,7 +183,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(claude_code_token_usage_tokens_total{query_source=\"subagent\"}[$__range])) / sum(rate(claude_code_token_usage_tokens_total[$__range]))",
+          "expr": "sum(max_over_time(claude_code_token_usage_tokens_total{query_source=\"subagent\"}[$__range])) / sum(max_over_time(claude_code_token_usage_tokens_total[$__range]))",
           "legendFormat": "__auto"
         }
       ],
@@ -216,7 +216,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum by (model) (increase(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d])) * $usdjpy",
+          "expr": "sum by (model) (max_over_time(claude_code_cost_usage_USD_total{model=~\"$model\"}[1d])) * $usdjpy",
           "legendFormat": "{{model}}"
         }
       ],
@@ -233,8 +233,8 @@
       "type": "timeseries",
       "title": "Claude Code トークン種別内訳",
       "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
+        "type": "loki",
+        "uid": "loki"
       },
       "gridPos": {
         "w": 12,
@@ -246,11 +246,42 @@
         {
           "refId": "A",
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "loki",
+            "uid": "loki"
           },
-          "expr": "sum by (type) (rate(claude_code_token_usage_tokens_total{model=~\"$model\"}[$__rate_interval]))",
-          "legendFormat": "{{type}}"
+          "expr": "sum(sum_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | unwrap input_tokens [$__auto]))",
+          "legendFormat": "input",
+          "queryType": null
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum(sum_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | unwrap output_tokens [$__auto]))",
+          "legendFormat": "output",
+          "queryType": null
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum(sum_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | unwrap cache_read_tokens [$__auto]))",
+          "legendFormat": "cacheRead",
+          "queryType": null
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum(sum_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | unwrap cache_creation_tokens [$__auto]))",
+          "legendFormat": "cacheCreation",
+          "queryType": null
         }
       ],
       "fieldConfig": {
@@ -266,8 +297,8 @@
       "type": "timeseries",
       "title": "Claude Code query_source 別トークン",
       "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
+        "type": "loki",
+        "uid": "loki"
       },
       "gridPos": {
         "w": 12,
@@ -279,11 +310,12 @@
         {
           "refId": "A",
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "loki",
+            "uid": "loki"
           },
-          "expr": "sum by (query_source) (rate(claude_code_token_usage_tokens_total[$__rate_interval]))",
-          "legendFormat": "{{query_source}}"
+          "expr": "sum by (query_source) (sum_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | unwrap input_tokens [$__auto])) + sum by (query_source) (sum_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | unwrap output_tokens [$__auto])) + sum by (query_source) (sum_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | unwrap cache_read_tokens [$__auto])) + sum by (query_source) (sum_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | unwrap cache_creation_tokens [$__auto]))",
+          "legendFormat": "{{query_source}}",
+          "queryType": null
         }
       ],
       "fieldConfig": {

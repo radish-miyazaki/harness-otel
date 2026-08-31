@@ -24,3 +24,4 @@
 | [0013](0013-native-configs-for-prek-and-ryl.md) | prek と ryl は互換形式をやめてネイティブ設定に寄せる | 採用 |
 | [0014](0014-claude-code-automation-in-repo.md) | Claude Code の設定はリポジトリに入れ、MCP は読み取りに限る | 採用 |
 | [0015](0015-tombi-for-toml.md) | TOML の整形と検査に tombi を入れる | 採用 |
+| [0016](0016-session-scoped-counter-aggregation.md) | セッション単位のカウンタは max_over_time で集計する | 採用 |

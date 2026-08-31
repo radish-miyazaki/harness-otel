@@ -118,7 +118,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(claude_code_code_edit_tool_decision_total{decision=\"accept\"}[$__range])) / sum(rate(claude_code_code_edit_tool_decision_total[$__range]))",
+          "expr": "sum(max_over_time(claude_code_code_edit_tool_decision_total{decision=\"accept\"}[$__range])) / sum(max_over_time(claude_code_code_edit_tool_decision_total[$__range]))",
           "legendFormat": "accept"
         }
       ],
